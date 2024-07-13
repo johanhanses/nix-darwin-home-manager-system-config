@@ -46,9 +46,16 @@
 
             system.defaults.dock.autohide = true;
             system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
+            # backwards compat; don't change
+            system.stateVersion = 4;
           })
           inputs.home-manager.darwinModules.home-manager
           {
+
+	    users.users.johanhanses = {
+	      name = "johanhanses";
+	      home = "/Users/johanhanses";
+	    };
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
@@ -56,8 +63,6 @@
 	        ({ pkgs, ... }: {
                   # Don't change this when you change package input. Leave it alone.
                   home.stateVersion = "24.05";
-                  home.username = "johanhanses";
-                  home.homeDirectory = "/Users/johanhanses";
                   # specify my home-manager configs
                   home.packages = [
                     pkgs.ripgrep
