@@ -33,8 +33,8 @@
             system.keyboard.enableKeyMapping = true;
             system.keyboard.remapCapsLockToControl = true;
 
-            fonts.fontDir.enable = false; 
-            fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; }) ];
+#            fonts.fontDir.enable = false; 
+#            fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "Meslo" ]; }) ];
 
             services.nix-daemon.enable = true;
 
@@ -56,6 +56,8 @@
 	        ({ pkgs, ... }: {
                   # Don't change this when you change package input. Leave it alone.
                   home.stateVersion = "24.05";
+                  home.username = "johanhanses";
+                  home.homeDirectory = "/Users/johanhanses";
                   # specify my home-manager configs
                   home.packages = [
                     pkgs.ripgrep
@@ -97,10 +99,10 @@
                     set editing-mode vi-insert
                   '';
                 })
-	      ]
-            }
+	      ];
+            };
           } 
         ];
-    }
+    };
   };
 }
