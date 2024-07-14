@@ -19,17 +19,28 @@
     darwinConfigurations.DtMackan =
       inputs.darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        pkgs = import inputs.nixpkgs { system = "aarch64-darwin"; };
+        pkgs = import inputs.nixpkgs { 
+          system = "aarch64-darwin"; 
+          config = {
+            allowUnfree = true;
+            allowUnfreePredicate = _: true;
+          };
+        };
 	modules = [
           ({ pkgs, ... }: {
             # here go the darwin preferences and config items
 	    programs.zsh.enable = true;
             environment.shells = [ pkgs.bash pkgs.zsh ];
             environment.loginShell = pkgs.zsh;
-
-            nix.extraOptions = ''
+            
+            environment.systemPackages = [
+              pkgs.raycast
+            ];
+            
+	    nix.extraOptions = ''
               experimental-features = nix-command flakes
             '';
+            
             system.keyboard.enableKeyMapping = true;
             system.keyboard.remapCapsLockToControl = true;
 
@@ -46,8 +57,19 @@
 
             system.defaults.dock.autohide = true;
             system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
+
             # backwards compat; don't change
             system.stateVersion = 4;
+            
+            homebrew = {
+              enable = true;
+              caskArgs.no_quarantine = true;
+              global.brewfile = true;
+              masApps = { };
+              casks = [ "google-chrome" "mattermost" "firefox" "sublime-text" ];
+              taps = [ ];
+              # brews = [ ];
+            };
           })
           inputs.home-manager.darwinModules.home-manager
           {
@@ -73,25 +95,7 @@
                   home.sessionVariables = {
                     PAGER = "less";
                     CLICLOLOR = 1;
-                    EDITOR = "nvim";
-                  };
-                  programs.bat.enable = true;
-                  programs.bat.config.theme = "TwoDark";
-                  programs.fzf.enable = true;
-                  programs.fzf.enableZshIntegration = true;
-                  programs.exa.enable = true;
-                  programs.git.enable = true;
-                  programs.zsh.enable = true;
-                  programs.zsh.enableCompletion = true;
-                  programs.zsh.enableAutosuggestions = true;
-                  programs.zsh.enableSyntaxHighlighting = true;
-                  programs.zsh.shellAliases = { ls = "ls --color=auto -F"; };
-                  programs.starship.enable = true;
-                  programs.starship.enableZshIntegration = true;
-                  programs.alacritty = {
-                    enable = true;
-                    settings.font.normal.family = "MesloLGS Nerd Font Mono";
-                    settings.font.size = 16;
+                    EDITOR = "vim";
                   };
                   home.file.".inputrc".text = ''
                     set show-all-if-ambiguous on
@@ -103,6 +107,26 @@
                     set keymap vi
                     set editing-mode vi-insert
                   '';
+                  programs.bat.enable = true;
+                  programs.bat.config.theme = "TwoDark";
+                  programs.fzf.enable = true;
+                  programs.fzf.enableZshIntegration = true;
+                  programs.git.enable = true;
+                  programs.git.userName = "johanhanses";
+                  programs.git.userEmail = "johanhanses@gmail.com";
+                  programs.zsh.enable = true;
+                  programs.zsh.enableCompletion = true;
+                  programs.zsh.enableAutosuggestions = true;
+                  programs.zsh.enableSyntaxHighlighting = true;
+                  programs.zsh.shellAliases = { ls = "ls --color=auto -F"; };
+                  programs.starship.enable = true;
+                  programs.starship.enableZshIntegration = true;
+                  programs.alacritty = {
+                    enable = true;
+                    # settings.font.normal.family = "MesloLGS Nerd Font Mono";
+                    settings.font.size = 16;
+                  };
+		  
                 })
 	      ];
             };
