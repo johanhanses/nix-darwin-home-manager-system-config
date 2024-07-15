@@ -32,7 +32,7 @@
 	          programs.zsh.enable = true;
             environment.shells = [ pkgs.bash pkgs.zsh ];
             environment.loginShell = pkgs.zsh;
-            environment.systemPath = [ "/opt/homebrew/bin" ];    
+            environment.systemPath = [ "/opt/homebrew/bin" "$XDG_CONFIG_HOME/scripts" ];    
             
             environment.systemPackages = [
               pkgs.raycast
@@ -51,6 +51,7 @@
 
             system.defaults.finder.AppleShowAllExtensions = true;
             system.defaults.finder._FXShowPosixPathInTitle = true;
+            system.defaults.NSGlobalDomain.AppleShowAllFiles = true;
             system.defaults.finder.FXPreferredViewStyle = "Nlsv";
             system.defaults.finder.ShowPathbar = true;
             system.defaults.finder.ShowStatusBar = true;
@@ -124,12 +125,6 @@
                   programs.git.userName = "johanhanses";
                   programs.git.userEmail = "johanhanses@gmail.com";
                   
-                  # programs.zsh.enable = true;
-                  # programs.zsh.enableCompletion = true;
-                  # programs.zsh.enableAutosuggestions = true;
-                  # programs.zsh.enableSyntaxHighlighting = true;
-                  # programs.zsh.shellAliases = { ls = "ls --color=auto -F"; };
-
                   programs.zsh = {
                     enable = true;
                     enableCompletion = false; # enabled in oh-my-zsh
@@ -160,7 +155,7 @@
                       ONPREM_CERT_DIR="$LKAB_DIR/on-prem/cert";
                       LDFLAGS="-L/opt/homebrew/opt/node@18/lib";
                       CPPFLAGS="-I/opt/homebrew/opt/node@18/include";
-                      # PATH="/opt/homebrew/opt/node@18/bin:$PATH";
+                      PATH="/opt/homebrew/opt/node@18/bin:$PATH";
                       ZSH="$HOME/.oh-my-zsh";
                       # PATH="$XDG_CONFIG_HOME/scripts:$PATH";
                     };
