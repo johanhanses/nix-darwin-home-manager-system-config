@@ -26,19 +26,19 @@
             allowUnfreePredicate = _: true;
           };
         };
-	      modules = [
+        modules = [
           ({ pkgs, ... }: {
             # here go the darwin preferences and config items
-	          programs.zsh.enable = true;
+            programs.zsh.enable = true;
             environment.shells = [ pkgs.bash pkgs.zsh ];
             environment.loginShell = pkgs.zsh;
-            environment.systemPath = [ "/opt/homebrew/bin" "$XDG_CONFIG_HOME/scripts" ];    
+            environment.systemPath = [ "/opt/homebrew/bin" "$HOME/.config/scripts" ];    
             
             environment.systemPackages = [
               pkgs.raycast
             ];
             
-	          nix.extraOptions = ''
+            nix.extraOptions = ''
               experimental-features = nix-command flakes
             '';
             
@@ -82,16 +82,16 @@
           
           inputs.home-manager.darwinModules.home-manager
           {
-      	    users.users.johanhanses = {
-      	      name = "johanhanses";
-      	      home = "/Users/johanhanses";
-      	    };
+            users.users.johanhanses = {
+              name = "johanhanses";
+              home = "/Users/johanhanses";
+            };
 
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
               users.johanhanses.imports = [
-	            ({ pkgs, ... }: {
+                ({ lib, pkgs, ... }: {
                   # Don't change this when you change package input. Leave it alone.
                   home.stateVersion = "24.05";
                   
@@ -103,6 +103,10 @@
                     pkgs.less
                     pkgs.tree
                   ];
+
+                  home.activation.aliasApplications = lib.hm.dag.entryAfter ["writeBoundary"] ''
+                    run ln -sf /Users/johanhanses/Repos/github.com/johanhanses/dotfiles/scripts/ /Users/johanhanses/.config/scripts
+                  '';
                   
                   home.file.".inputrc".text = ''
                     set show-all-if-ambiguous on
@@ -132,96 +136,80 @@
                     syntaxHighlighting.enable = true;
 
                     sessionVariables = {
-                      # HISTFILE=~/.histfile;
-                      HISTSIZE=25000;
-                      SAVEHIST=25000;
-                      HISTCONTROL="ignorespace";
-                      # PATH="$HOME/bin:/usr/local/bin:$PATH";
-                      XDG_CONFIG_HOME="$HOME/.config";
-                      REPOS="$HOME/Repos";
-                      GITUSER="johanhanses";
-                      GHREPOS="$REPOS/github.com/$GITUSER";
-                      DOTFILES="$GHREPOS/dotfiles";
-                      SCRIPTS="$DOTFILES/scripts";
-                      SECOND_BRAIN="$HOME/Documents/obsidian-notes";
-                      CLICOLOR=1;
-                      # TERM=xterm-256color;
-                      # COLORTERM=truecolor;
-                      LC_ALL="en_US.UTF-8";
-                      LANG="en_US.UTF-8";
-                      WORK_DIR="$REPOS/github.com/Digital-Tvilling";
-                      LKAB_DIR="$WORK_DIR/.lkab";
-                      ONPREM_CONFIG_DIR="$LKAB_DIR/on-prem/config";
-                      ONPREM_CERT_DIR="$LKAB_DIR/on-prem/cert";
-                      LDFLAGS="-L/opt/homebrew/opt/node@18/lib";
-                      CPPFLAGS="-I/opt/homebrew/opt/node@18/include";
-                      PATH="/opt/homebrew/opt/node@18/bin:$PATH";
-                      ZSH="$HOME/.oh-my-zsh";
-                      # PATH="$XDG_CONFIG_HOME/scripts:$PATH";
+                      HISTSIZE = "25000";
+                      SAVEHIST = "25000";
+                      HISTCONTROL = "ignorespace";
+                      XDG_CONFIG_HOME = "$HOME/.config";
+                      REPOS = "$HOME/Repos";
+                      GITUSER = "johanhanses";
+                      GHREPOS = "$HOME/Repos/github.com/johanhanses";
+                      DOTFILES = "$HOME/Repos/github.com/johanhanses/dotfiles";
+                      SCRIPTS = "$HOME/Repos/github.com/johanhanses/dotfiles/scripts";
+                      SECOND_BRAIN = "$HOME/Documents/obsidian-notes";
+                      CLICOLOR = "1";
+                      LC_ALL = "en_US.UTF-8";
+                      LANG = "en_US.UTF-8";
+                      WORK_DIR = "$HOME/Repos/github.com/Digital-Tvilling";
+                      LKAB_DIR = "$HOME/Repos/github.com/Digital-Tvilling/.lkab";
+                      ONPREM_CONFIG_DIR = "$HOME/Repos/github.com/Digital-Tvilling/.lkab/on-prem/config";
+                      ONPREM_CERT_DIR = "$HOME/Repos/github.com/Digital-Tvilling/.lkab/on-prem/cert";
+                      LDFLAGS = "-L/opt/homebrew/opt/node@18/lib";
+                      CPPFLAGS = "-I/opt/homebrew/opt/node@18/include";
+                      PATH = "/opt/homebrew/opt/node@18/bin:$PATH";
+                      ZSH = "$HOME/.oh-my-zsh";
                     };
 
                     shellAliases = {
-                      zk="cd $GHREPOS/zettelkasten";
-                      repos="cd $REPOS";
-                      ghrepos="cd $GHREPOS";
-                      dot="cd $GHREPOS/dotfiles";
-                      scripts="cd $DOTFILES/scripts";
-                      rwdot="cd $REPOS/github.com/rwxrob/dot";
-                      rob="cd $REPOS/github.com/rwxrob";
-                      dt="cd $REPOS/github.com/Digital-Tvilling";
-                      rtm="cd $REPOS/github.com/Digital-Tvilling/dt-frontend-vite";
-                      deploy="cd $REPOS/github.com/Digital-Tvilling/deployment-configuration";
-                      backend="cd $REPOS/github.com/Digital-Tvilling/deployment-configuration/external/localhost";
-                      dti="cd $REPOS/github.com/Digital-Tvilling/dti";
-                      icloud="cd ~/Library/Mobile\ Documents/com~apple~CloudDocs";
-                      sb="cd $SECOND_BRAIN";
-                      "in"="cd $SECOND_BRAIN/0\ Inbox";
-                      config="cd $XDG_CONFIG_HOME";
-                      sbr="source ~/.bashrc";
-                      sz="source ~/.zshrc";
-                      cat="bat";
-                      fast="fast -u --single-line";
-                      # nv=nvim;
-                      ".."="cd ..";
-                      c="clear";
-                      # "?"=duck;
-                      # "??"=gpt;
-                      # "???"=google;
-                      n="npm";
-                      nr="npm run";
-                      ns="npm start";
-                      ls="ls --color=auto";
-                      ll="ls -la";
-                      l="ls -l";
-                      la="ls -lathr";
-                      e="exit";
-                      gm="git checkout main && git pull";
-                      gp="git push";
-                      ga="git add .";
-                      gs="git status";
-                      gc="git checkout";
-                      gcb="git checkout -b";
-                      gcm="git commit -m";
-                      lg="lazygit";
-                      k="kubectl";
-                      t="tmux";
-                      tk="tmux kill-server";
-                      tl="tmux ls";
-                      ta="tmux a";
-                      d="docker";
-                      dc="docker compose";
+                      zk = "cd $GHREPOS/zettelkasten";
+                      repos = "cd $REPOS";
+                      ghrepos = "cd $GHREPOS";
+                      dot = "cd $GHREPOS/dotfiles";
+                      scripts = "cd $DOTFILES/scripts";
+                      rwdot = "cd $REPOS/github.com/rwxrob/dot";
+                      rob = "cd $REPOS/github.com/rwxrob";
+                      dt = "cd $REPOS/github.com/Digital-Tvilling";
+                      rtm = "cd $REPOS/github.com/Digital-Tvilling/dt-frontend-vite";
+                      deploy = "cd $REPOS/github.com/Digital-Tvilling/deployment-configuration";
+                      backend = "cd $REPOS/github.com/Digital-Tvilling/deployment-configuration/external/localhost";
+                      dti = "cd $REPOS/github.com/Digital-Tvilling/dti";
+                      icloud = "cd ~/Library/Mobile\\ Documents/com~apple~CloudDocs";
+                      sb = "cd $SECOND_BRAIN";
+                      "in" = "cd $SECOND_BRAIN/0\\ Inbox";
+                      config = "cd $XDG_CONFIG_HOME";
+                      c = "clear";
+                      cat = "bat";
+                      fast = "fast -u --single-line";
+                      n = "npm";
+                      nr = "npm run";
+                      ns = "npm start";
+                      ls = "ls --color=auto";
+                      ll = "ls -la";
+                      l = "ls -l";
+                      la = "ls -lathr";
+                      e = "exit";
+                      gm = "git checkout main && git pull";
+                      gp = "git push";
+                      ga = "git add .";
+                      gs = "git status";
+                      gc = "git checkout";
+                      gcb = "git checkout -b";
+                      gcm = "git commit -m";
+                      lg = "lazygit";
+                      k = "kubectl";
+                      t = "tmux";
+                      tk = "tmux kill-server";
+                      tl = "tmux ls";
+                      ta = "tmux a";
+                      d = "docker";
+                      dc = "docker compose";
                     };
 
                     oh-my-zsh = {
                       enable = true;
                       plugins = [ "git" "systemd" "rsync" "kubectl" ];
-                      # theme = "terminalparty";
                       theme = "robbyrussell";
                     };
                   };
-                  
-                  # programs.starship.enable = true;
-                  # programs.starship.enableZshIntegration = true;
                   
                   programs.kitty = {
                     enable = true;
@@ -229,7 +217,7 @@
                     font.size = 18;
                   };
                 })
-	            ];
+              ];
             };
           } 
         ];
